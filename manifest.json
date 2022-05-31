@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "version": "1.0.0",
+  "name": "Eng help 1",
+  "description": "A chrome extension 1",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["contextMenus", "search", "tabs"],
+  "content_scripts": [
+    {
+      "matches": ["http://*.medium.com/*", "https://*.medium.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ]
+}
+
