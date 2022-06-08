@@ -1,7 +1,4 @@
-// const parsingFunc = require('./funcs.js')
 console.log("CONTENT SCRIPT");
-console.log("______________");
-
 
 const parsingFunc = (allinnerText) =>{
   allinnerText = allinnerText.replace(/\W/g, ' ');
@@ -12,9 +9,9 @@ const parsingFunc = (allinnerText) =>{
 
 const uniqWords = parsingFunc(document.body.innerText);
 chrome.runtime.sendMessage(null, uniqWords)
-chrome.runtime.onMessage.addListener((msg,sender,sendResponse) => {
+chrome.runtime.onMessage.addListener((msg) => {
   allDescendants(document.body,msg);
-
+  return Promise.resolve("Dummy response to keep the console quiet");
 });
 
 function allDescendants (node, msg) {
