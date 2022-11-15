@@ -93,7 +93,11 @@ chrome.runtime.onMessage.addListener((msg, sender) => {
     .then(res => res.json())
     .then(data => {
       chrome.tabs.sendMessage(sender.tab.id, data);
+    }).catch(e => {
+      chrome.tabs.sendMessage(sender.tab.id, { error: true, e });
     });
+
+
 
   return Promise.resolve('Dummy response to keep the console quiet');
 });
