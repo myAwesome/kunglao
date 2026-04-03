@@ -6,7 +6,7 @@ services:
       MYSQL_ROOT_PASSWORD: vova
       MYSQL_DATABASE: eng
       MYSQL_USER: vova
-      MYSQL_PASSWORD: vova
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "${MYSQL_PORT}:3306"
     tty: true
