@@ -1,5 +1,10 @@
 'use strict';
 
+if (window.__engHelpSelectionUiInitialized) {
+  // Prevent duplicate listeners when icon is clicked multiple times.
+} else {
+  window.__engHelpSelectionUiInitialized = true;
+
 const ACTIONS_ID = 'eng-help-selection-actions';
 const MAX_WIDTH_OFFSET = 16;
 const VERTICAL_OFFSET = 10;
@@ -8,6 +13,7 @@ let actionsNode;
 let knowBtn;
 let ignoreBtn;
 let selectedText = '';
+let updateScheduled = false;
 
 function initActions() {
   if (actionsNode) {
@@ -99,6 +105,18 @@ function showActions(selection) {
 }
 
 function onSelectionChange() {
+  if (updateScheduled) {
+    return;
+  }
+
+  updateScheduled = true;
+  window.requestAnimationFrame(() => {
+    updateScheduled = false;
+    syncSelectionActions();
+  });
+}
+
+function syncSelectionActions() {
   const selection = window.getSelection();
   if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
     hideActions();
@@ -110,6 +128,8 @@ function onSelectionChange() {
 
 initActions();
 document.addEventListener('selectionchange', onSelectionChange);
+document.addEventListener('mouseup', onSelectionChange);
+document.addEventListener('keyup', onSelectionChange);
 document.addEventListener('scroll', hideActions, true);
 document.addEventListener('mousedown', event => {
   if (!actionsNode || actionsNode.contains(event.target)) {
@@ -117,3 +137,4 @@ document.addEventListener('mousedown', event => {
   }
   hideActions();
 });
+}
