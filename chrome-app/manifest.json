@@ -23,6 +23,14 @@
     }
   },
   "permissions": ["contextMenus", "search", "tabs", "webNavigation", "activeTab", "scripting"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["selection-ui.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
   "action": {
     "default_icon": {
       "16": "img/icon.png",
@@ -31,4 +39,3 @@
     }
   }
 }
-

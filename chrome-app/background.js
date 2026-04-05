@@ -29,6 +29,28 @@ const clearHighlight = async selectionText => {
 
 };
 
+const clearHighlightInTab = async (tabId, selectionText) => {
+  if (!tabId) {
+    return;
+  }
+
+  await chrome.scripting.executeScript(
+    {
+      target: { tabId },
+      func: (selectionText, HIGHLIGHT) => {
+        const selectedWords = selectionText.map(w => w.toLowerCase());
+        const allHighlightedNodes =
+          Array.from(document.getElementsByClassName(HIGHLIGHT));
+        for (const node of allHighlightedNodes) {
+          if (selectedWords.includes(node.textContent.toLowerCase())) {
+            node.classList.remove(HIGHLIGHT);
+          }
+        }
+      },
+      args: [selectionText, HIGHLIGHT]
+    });
+};
+
 const sendKnow = selectionText => {
   fetch('http://localhost:8080/know', {
     method: 'POST',
@@ -80,9 +102,39 @@ chrome.contextMenus.onClicked.addListener(event => {
   }
 });
 
+chrome.runtime.onMessage.addListener((msg, sender) => {
+  if (!msg || msg.type !== 'selection-action') {
+    return;
+  }
+
+  const selection = (msg.selectionText || '').trim();
+  if (!selection) {
+    return;
+  }
+
+  const listOfUniqWords = parsingFunc1(selection);
+  if (listOfUniqWords.length === 0) {
+    return;
+  }
+
+  if (msg.action === 'know') {
+    sendKnow(listOfUniqWords);
+    clearHighlightInTab(sender?.tab?.id, listOfUniqWords);
+  }
+
+  if (msg.action === 'ignore') {
+    sendIgnore(listOfUniqWords);
+    clearHighlightInTab(sender?.tab?.id, listOfUniqWords);
+  }
+});
+
 
 
 chrome.runtime.onMessage.addListener((msg, sender) => {
+  if (!Array.isArray(msg)) {
+    return;
+  }
+
   fetch('http://localhost:8080/filter-unknown', {
     method: 'POST',
     headers: {

@@ -1,0 +1,36 @@
+.eng-help-selection-actions {
+  position: absolute;
+  z-index: 2147483647;
+  display: none;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  border: 1px solid #e7e7e7;
+}
+
+.eng-help-selection-btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 14px 22px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  min-width: 120px;
+  transition: transform 80ms ease, opacity 80ms ease;
+}
+
+.eng-help-selection-btn:active {
+  transform: scale(0.97);
+}
+
+.eng-help-selection-btn--know {
+  background: #0ea36b;
+  color: #fff;
+}
+
+.eng-help-selection-btn--ignore {
+  background: #e24848;
+  color: #fff;
+}
