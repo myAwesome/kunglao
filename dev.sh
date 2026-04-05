@@ -26,7 +26,7 @@ echo "▸ Installing Server dependencies..."
 
 echo "▸ Starting Server..."
 (cd server && npm run start) &
-$SERVER_PID=$!
+SERVER_PID=$!
 
 trap "kill $SERVER_PID 2>/dev/null; exit" INT TERM
 wait $SERVER_PID
