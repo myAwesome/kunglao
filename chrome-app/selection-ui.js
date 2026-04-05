@@ -1,5 +1,10 @@
 'use strict';
 
+if (window.__engHelpSelectionUiInitialized) {
+  // Prevent duplicate listeners when icon is clicked multiple times.
+} else {
+  window.__engHelpSelectionUiInitialized = true;
+
 const ACTIONS_ID = 'eng-help-selection-actions';
 const MAX_WIDTH_OFFSET = 16;
 const VERTICAL_OFFSET = 10;
@@ -132,3 +137,4 @@ document.addEventListener('mousedown', event => {
   }
   hideActions();
 });
+}

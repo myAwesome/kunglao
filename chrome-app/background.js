@@ -155,9 +155,23 @@ chrome.runtime.onMessage.addListener((msg, sender) => {
 });
 
 chrome.action.onClicked.addListener(
-  tab => {
-    chrome.scripting.executeScript(
-      { target: { tabId: tab.id }, files: ['content.js'] });
+  async tab => {
+    try {
+      await chrome.scripting.insertCSS({
+        target: { tabId: tab.id },
+        files: ['content.css']
+      });
+
+      await chrome.scripting.executeScript(
+        { target: { tabId: tab.id }, files: ['selection-ui.js'] }
+      );
+
+      await chrome.scripting.executeScript(
+        { target: { tabId: tab.id }, files: ['content.js'] }
+      );
+    } catch (e) {
+      return;
+    }
   }
 );
 
